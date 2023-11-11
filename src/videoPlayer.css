@@ -1,0 +1,16 @@
+
+.container{
+    font-family: 'Poppins', sans-serif;
+}
+
+h1{
+    font-family: 'Playfair Display', serif;
+    font-weight: bolder;
+}
+
+.audio-waveform {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    position: relative;
+}
