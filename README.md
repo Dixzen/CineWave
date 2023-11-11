@@ -16,7 +16,7 @@ A web-based video player with audio waveform visualization, built using ReactJS 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/video-player.git
+   git clone https://github.com/Dixzen/CineWave.git
 
 2. Navigate to the project directory:
 
