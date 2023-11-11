@@ -128,7 +128,7 @@ const VideoPlayer = () => {
                         <canvas ref={canvasRef} className="img-fluid" />
                         <video ref={videoRef} src={videoFile} onLoadedMetadata={handleMetadata} hidden />
                         <div className="controls text-center mt-2">
-                            <button className="btn btn-primary btn-lg" onClick={togglePlayPause}>Play/Pause</button>
+                            <button className="btn btn-primary btn-lg btn-danger" onClick={togglePlayPause}>Play/Pause</button>
                         </div>
                     </div>
                     )}

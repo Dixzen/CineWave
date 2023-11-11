@@ -4,7 +4,8 @@
 }
 
 h1{
-    font-family: 'Playfair Display', serif;
+    /* font-family: 'Playfair Display', serif; */
+    font-family: 'Poppins', sans-serif;
     font-weight: bolder;
 }
 
@@ -13,4 +14,8 @@ h1{
     border: 1px solid #ddd;
     border-radius: 4px;
     position: relative;
+}
+
+h5{
+    color:rgb(31, 31, 31);
 }
