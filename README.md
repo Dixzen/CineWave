@@ -21,7 +21,7 @@ A web-based video player with audio waveform visualization, built using ReactJS 
 2. Navigate to the project directory:
 
     ```bash
-    cd video-player
+    cd CineWave
 
 3. Install dependencies:
 
