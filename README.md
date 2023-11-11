@@ -1,6 +1,7 @@
 # Video Player
 
-![video](assests/cine-wave.mp4)
+![GIF Alt Text](https://github.com/Dixzen/CineWave/blob/master/assests/gif.gif)
+
 
 A web-based video player with audio waveform visualization, built using ReactJS and HTML5 Canvas.
 
