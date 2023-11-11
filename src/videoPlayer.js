@@ -20,32 +20,89 @@ const VideoPlayer = () => {
         });
     }, []);
 
-    const handleFileChange = (event) => {
+    // const handleFileChange = (event) => {
 
-        const file = event.target.files[0];
+    //     const file = event.target.files[0];
 
-        if (file) {
-          const videoURL = URL.createObjectURL(file);
-          const videoElement = document.createElement('video');
-        //   const videoElement = videoRef.current;
-          videoElement.src = videoURL;
+    //     if (file) {
+    //       const videoURL = URL.createObjectURL(file);
+    //       const videoElement = document.createElement('video');
+    //     //   const videoElement = videoRef.current;
+    //       videoElement.src = videoURL;
           
-          videoElement.addEventListener('loadeddata', () => {
-            // Check if the video has an audio track
-            if (videoElement.mozHasAudio ||
-                Boolean(videoElement.webkitAudioDecodedByteCount) ||
-                Boolean(videoElement.audioTracks && videoElement.audioTracks.length)) {
-              setVideoFile(videoURL);
-              wavesurfer.current.load(videoURL);
-              extractAudioWaveform(videoElement);
-            } 
-            else {
-              alert('Video without audio cannot be uploaded.');
-              URL.revokeObjectURL(videoURL);
-            }
-          });
+    //       videoElement.addEventListener('loadeddata', () => {
+
+    //         if (videoElement.mozHasAudio ||
+    //             Boolean(videoElement.webkitAudioDecodedByteCount) ||
+    //             Boolean(videoElement.audioTracks && videoElement.audioTracks.length)) {
+    //                 setVideoFile(videoURL);
+    //                 wavesurfer.current.load(videoURL);
+    //                 extractAudioWaveform(videoElement);
+    //         } 
+    //         else {
+    //           alert('Video without audio cannot be uploaded.');
+    //           URL.revokeObjectURL(videoURL);
+    //         }
+    //       });
+    //     }
+    // };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const videoURL = URL.createObjectURL(file);
+            const videoElement = document.createElement('video');
+            videoElement.src = videoURL;
+      
+            videoElement.addEventListener('loadeddata', () => {
+                checkVideoForAudio(videoElement).then(hasAudio => {
+                    if (hasAudio) {
+                        setVideoFile(videoURL);
+                        wavesurfer.current.load(videoURL);
+                        extractAudioWaveform(videoElement);
+                    } 
+                    else {
+                        alert('Video without audio cannot be uploaded.');
+                        URL.revokeObjectURL(videoURL);
+                    }
+                });
+            });
         }
     };
+      
+      const checkVideoForAudio = (videoElement) => {
+        return new Promise((resolve) => {
+          // Create new audio context
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const source = audioContext.createMediaElementSource(videoElement);
+          const analyser = audioContext.createAnalyser();
+          source.connect(analyser);
+          analyser.connect(audioContext.destination);
+      
+          analyser.fftSize = 256;
+          let bufferLength = analyser.frequencyBinCount;
+          let dataArray = new Uint8Array(bufferLength);
+          
+          // Play video
+          videoElement.play().then(() => {
+            // Short timeout to allow audio data to load
+            setTimeout(() => {
+              analyser.getByteFrequencyData(dataArray);
+      
+              // Check for the presence of audio data
+              let hasAudio = dataArray.some((value) => value > 0);
+      
+              // Clean up
+              videoElement.pause();
+              source.disconnect();
+              analyser.disconnect();
+              audioContext.close();
+              
+              resolve(hasAudio);
+            }, 1000);
+          }).catch(() => resolve(false));
+        });
+      };
 
 
     const extractAudioWaveform = (videoElement) => {
@@ -115,7 +172,7 @@ const VideoPlayer = () => {
         
         <div className="container mt-5">
 
-            <h1 className='display-1 mb-5'>VTube</h1>
+            <h1 className='display-1 mb-5'>CineWave</h1>
 
             <div className="row">
                 <div className="col-md-8">
